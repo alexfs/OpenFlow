@@ -25,12 +25,15 @@
 #import <UIKit/UIKit.h>
 
 
-@interface AFItemView : UIView {
+@interface AFItemView : UIView 
+{
 	UIImageView		*imageView;
 	int				number;
 	CGFloat			horizontalPosition;
 	CGFloat			verticalPosition;
 	CGFloat			originalImageHeight;
+	
+	UIActivityIndicatorView* waitingWheel;
 }
 
 @property int number;
@@ -40,5 +43,6 @@
 
 - (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction;
 - (CGSize)calculateNewSize:(CGSize)originalImageSize boundingBox:(CGSize)boundingBox;
+- (void)showWaitingIndicator: (BOOL) show forIndex: (int)index;
 
 @end

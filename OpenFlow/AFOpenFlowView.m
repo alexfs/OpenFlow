@@ -264,7 +264,7 @@ const static CGFloat kReflectionFraction = 0.85;
 
 	beginningCover = selectedCoverView.number;
 	// Make sure the user is tapping on a cover.
-	startPosition = (startPoint.x / 1.5) + scrollView.contentOffset.x;
+	startPosition = startPoint.x + scrollView.contentOffset.x;
 	
 	if (isSingleTap)
 		isDoubleTap = YES;
@@ -272,7 +272,8 @@ const static CGFloat kReflectionFraction = 0.85;
 	isSingleTap = ([touches count] == 1);
 }
 
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event 
+{
 	isSingleTap = NO;
 	isDoubleTap = NO;
 	
@@ -281,10 +282,10 @@ const static CGFloat kReflectionFraction = 0.85;
 		return;
 	
 	CGPoint movedPoint = [[touches anyObject] locationInView:self];
-	CGFloat offset = startPosition - (movedPoint.x / 1.5);
+	CGFloat offset = startPosition - (movedPoint.x );
 	CGPoint newPoint = CGPointMake(offset, 0);
 	scrollView.contentOffset = newPoint;
-	int newCover = offset / COVER_SPACING;
+	int newCover = (offset + COVER_SPACING / 2) / COVER_SPACING;
 	if (newCover != selectedCoverView.number) {
 		if (newCover < 0)
 			[self setSelectedCover:0];
@@ -303,6 +304,10 @@ const static CGFloat kReflectionFraction = 0.85;
 		AFItemView *targetCover = [self findCoverOnscreen:targetLayer];
 		if (targetCover && (targetCover.number != selectedCoverView.number))
 			[self setSelectedCover:targetCover.number];
+		
+		// !!!!!
+		if (targetCover && (targetCover.number == selectedCoverView.number))
+			[self.viewDelegate openFlowView:self selectionTapped: selectedCoverView.number];
 	}
 	[self centerOnSelectedCover:YES];
 	
@@ -438,6 +443,15 @@ const static CGFloat kReflectionFraction = 0.85;
 		[self layoutCovers:newSelectedCover fromCover:selectedCoverView.number toCover:newSelectedCover];
 	
 	selectedCoverView = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:newSelectedCover]];
+}
+
+- (void)showWaitingIndicator: (BOOL) show forIndex: (int)index
+{	
+	AFItemView *aCover = (AFItemView *)[onscreenCovers objectForKey:[NSNumber numberWithInt:index]];
+	if (aCover)
+	{
+		[aCover showWaitingIndicator: show forIndex: index];
+	}
 }
 
 @end

@@ -1,3 +1,13 @@
+Changes to the original code:
+1. Added waiting indicator support for images in progress
+   - (void)showWaitingIndicator: (BOOL) show forIndex: (int)index;
+2. Added a callback for selecting an image
+    in AFOpenFlowViewDelegate:
+	- (void)openFlowView:(AFOpenFlowView *)openFlowView selectionTapped: (int)index;
+3. Fixed the following bug: backward swipe immediately switches images imdependently of swipe distance
+
+Original README:
+-------------------------
 Follow the project's status at http://apparentlogic.com/openflow and on Twitter at @openflow
 
 

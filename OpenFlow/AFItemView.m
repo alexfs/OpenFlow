@@ -30,8 +30,10 @@
 @implementation AFItemView
 @synthesize number, imageView, horizontalPosition, verticalPosition;
 
-- (id)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+- (id)initWithFrame:(CGRect)frame 
+{
+	if (self = [super initWithFrame:frame]) 
+	{
 		self.opaque = YES;
 		self.backgroundColor = NULL;
 		verticalPosition = 0;
@@ -41,33 +43,43 @@
 		imageView = [[UIImageView alloc] initWithFrame:frame];
 		imageView.opaque = YES;
 		[self addSubview:imageView];
+		
+		waitingWheel = [[[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle: UIActivityIndicatorViewStyleWhite] autorelease];
+		[waitingWheel stopAnimating];
+		[self addSubview: waitingWheel];
 	}
 	
 	return self;
 }
 
-- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction {
+- (void)setImage:(UIImage *)newImage originalImageHeight:(CGFloat)imageHeight reflectionFraction:(CGFloat)reflectionFraction 
+{
 	[imageView setImage:newImage];
 	verticalPosition = imageHeight * reflectionFraction / 2;
 	originalImageHeight = imageHeight;
 	self.frame = CGRectMake(0, 0, newImage.size.width, newImage.size.height);
 }
 
-- (void)setNumber:(int)newNumber {
+- (void)setNumber:(int)newNumber 
+{
 	horizontalPosition = COVER_SPACING * newNumber;
 	number = newNumber;
 }
 
-- (CGSize)calculateNewSize:(CGSize)baseImageSize boundingBox:(CGSize)boundingBox {
+- (CGSize)calculateNewSize:(CGSize)baseImageSize boundingBox:(CGSize)boundingBox 
+{
 	CGFloat boundingRatio = boundingBox.width / boundingBox.height;
 	CGFloat originalImageRatio = baseImageSize.width / baseImageSize.height;
 	
 	CGFloat newWidth;
 	CGFloat newHeight;
-	if (originalImageRatio > boundingRatio) {
+	if (originalImageRatio > boundingRatio) 
+	{
 		newWidth = boundingBox.width;
 		newHeight = boundingBox.width * baseImageSize.height / baseImageSize.width;
-	} else {
+	} 
+	else 
+	{
 		newHeight = boundingBox.height;
 		newWidth = boundingBox.height * baseImageSize.width / baseImageSize.height;
 	}
@@ -75,15 +87,27 @@
 	return CGSizeMake(newWidth, newHeight);
 }
 
-- (void)setFrame:(CGRect)newFrame {
+- (void)setFrame:(CGRect)newFrame 
+{
 	[super setFrame:newFrame];
 	[imageView setFrame:newFrame];
+	
+	waitingWheel.center = CGPointMake(newFrame.size.width / 2, newFrame.size.height / 4);
 }
 
-- (void)dealloc {
+- (void)dealloc 
+{
 	[imageView release];
 	
 	[super dealloc];
+}
+
+- (void) showWaitingIndicator: (BOOL) show forIndex: (int)index
+{
+	if (show)
+		[waitingWheel startAnimating];
+	else 
+		[waitingWheel stopAnimating];
 }
 
 @end
